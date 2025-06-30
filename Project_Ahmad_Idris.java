@@ -1,48 +1,45 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Project_Ahmad_Idris {
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+   public static void main(String[] args) throws FileNotFoundException {
+      File file = new File("PolicyInformation.txt");
+      Scanner input = new Scanner(file);
 
-        System.out.print("Please enter the Policy Number: ");
-        int policyNumber = input.nextInt();
-        input.nextLine();
+      int smokerCount = 0;
+      int nonSmokerCount = 0;
 
-        System.out.print("Please enter the Provider Name: ");
-        String providerName = input.nextLine();
+      while (input.hasNextLine()) {
+         String line = input.nextLine().trim();
+         if (line.isEmpty()) continue;
 
-        System.out.print("Please enter the Policyholder’s First Name: ");
-        String firstName = input.nextLine();
+         int policyNumber = Integer.parseInt(line);
+         String providerName = input.nextLine();
+         String firstName = input.nextLine();
+         String lastName = input.nextLine();
+         int age = Integer.parseInt(input.nextLine());
+         String smokingStatus = input.nextLine();
+         double height = Double.parseDouble(input.nextLine());
+         double weight = Double.parseDouble(input.nextLine());
 
-        System.out.print("Please enter the Policyholder’s Last Name: ");
-        String lastName = input.nextLine();
+         PolicyHolder holder = new PolicyHolder(firstName, lastName, age, smokingStatus, height, weight);
+         Policy policy = new Policy(policyNumber, providerName, holder);
 
-        System.out.print("Please enter the Policyholder’s Age: ");
-        int age = input.nextInt();
-        input.nextLine();
+         if (smokingStatus.equalsIgnoreCase("smoker")) {
+            smokerCount++;
+         } else {
+            nonSmokerCount++;
+         }
 
-        System.out.print("Please enter the Policyholder’s Smoking Status (smoker/non-smoker): ");
-        String smokingStatus = input.nextLine();
+         System.out.println(policy.toString());
+         System.out.println();
+      }
 
-        System.out.print("Please enter the Policyholder’s Height (in inches): ");
-        double height = input.nextDouble();
+      System.out.println("There were " + Policy.getPolicyCount() + " Policy objects created.");
+      System.out.println("The number of policies with a smoker is: " + smokerCount);
+      System.out.println("The number of policies with a non-smoker is: " + nonSmokerCount);
 
-        System.out.print("Please enter the Policyholder’s Weight (in pounds): ");
-        double weight = input.nextDouble();
-
-        Policy policy = new Policy(policyNumber, providerName, firstName, lastName, age, smokingStatus, height, weight);
-
-        System.out.println("\nPolicy Number: " + policy.getPolicyNumber());
-        System.out.println("Provider Name: " + policy.getProviderName());
-        System.out.println("Policyholder’s First Name: " + policy.getPolicyholderFirstName());
-        System.out.println("Policyholder’s Last Name: " + policy.getPolicyholderLastName());
-        System.out.println("Policyholder’s Age: " + policy.getPolicyholderAge());
-        System.out.println("Policyholder’s Smoking Status: " + policy.getSmokingStatus());
-        System.out.println("Policyholder’s Height: " + policy.getHeight() + " inches");
-        System.out.println("Policyholder’s Weight: " + policy.getWeight() + " pounds");
-        System.out.printf("Policyholder’s BMI: %.2f\n", policy.getBMI());
-        System.out.printf("Policy Price: $%.2f\n", policy.getPolicyPrice());
-    }
+      input.close();
+   }
 }
-
-
